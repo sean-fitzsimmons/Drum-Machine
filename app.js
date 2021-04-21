@@ -115,19 +115,31 @@ const audioClips = [
 
 
 function App() {
+  const [volume, setVolume] = React.useState(1); 
     return ( 
-    <div className="bg-info min-vh-100 text-white">
+    <div className="bg-success min-vh-100 text-white">
         <div className="text-center">
             <h2>Drum Machine</h2>
             {audioClips.map(clip => (
-                <Pad key={clip.id} clip={clip}/>
-            ))}
-        </div>
+                <Pad key={clip.id} clip={clip} volume={volume}/>
+            ))} 
+            <br />
+            <h4>Volume</h4>
+            <input 
+            type="range"
+            step="0.01"
+            onChange={(e) => setVolume(e.target.value)}
+            value={volume}
+            max="1"
+            min="0"
+            className="w-58"
+            />
+            </div>
     </div>    
     );
 }
 
-function Pad({ clip }) {
+function Pad({ clip, volume }) {
 
     const [active, setActive] = React.useState(false); 
 
@@ -148,6 +160,7 @@ function Pad({ clip }) {
     const audioTag = document.getElementById(clip.keyTrigger)
     setActive(true); 
     setTimeout(() => setActive(false), 200); 
+    audioTag.volume = volume; 
     audioTag.currentTime = 0; 
     audioTag.play(); 
     };
